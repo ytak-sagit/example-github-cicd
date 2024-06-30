@@ -1,4 +1,5 @@
 name: Functions
+run-name: Run Functions by ${{ github.actor }}
 on: push
 jobs:
   compare:
