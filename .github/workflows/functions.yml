@@ -1,0 +1,36 @@
+name: Functions
+on: push
+jobs:
+  compare:
+    name: Compare functions
+    runs-on: ubuntu-latest
+    steps:
+      - run: printenv | grep '_FUNC'
+        env:
+          CONTAINS_FUNC: ${{ contains('Hello', 'ell') }}
+          CONTAINS_ARRAY_FUNC: ${{ contains(github.event.*.html_url, 'https') }}
+          STARTS_WITH_FUNC: ${{ startsWith('World', 'Wo') }}
+          ENDS_WITH_FUNC: ${{ endsWith('fizzbuzz', 'zz') }}
+  generate:
+    name: Generate functions
+    runs-on: ubuntu-latest
+    steps:
+      - run: printenv | grep '_FUNC'
+        env:
+          FORMAT_FUNC: ${{ format('{0}, {1}', 'Hi', 'world') }}
+          JOIN_FUNC:  ${{ join(github.event.*.html_url, ', ') }}
+  json_dump:
+    name: JSON functions
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${CONTEXT}"
+        env:
+          CONTEXT: ${{ toJson(github) }}  # githubコンテキストをJSON文字列でダンプ
+  hash:
+    name: Hash functions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "${HASH}"
+        env:
+          HASH: ${{ hashFiles('.github/workflows/*.yml') }} # ハッシュ値の生成
