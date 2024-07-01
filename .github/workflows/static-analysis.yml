@@ -6,8 +6,8 @@ on:
 defaults:                                           # デフォルトシェル
   run:
     shell: bash
-concurrency:                                        # 自動キャンセル
-  group: ${{ github.workflow }}-${{ github.ref }}   # NOTE: コミット追加時に、古いワークフローの実行を自動キャンセル
+concurrency:                                        # ワークフロー多重起動時の自動キャンセル
+  group: ${{ github.workflow }}-${{ github.ref }}   # NOTE: 同一グループの場合、コミット追加時に、古いワークフローの実行を自動キャンセル
   cancel-in-progress: true
 jobs:
   lint:
