@@ -6,7 +6,11 @@ jobs:
     steps:
       - run: printenv | grep 'LITERAL_'
         env:
-          LITERAL_NULL: ${{ null }}
+          # NOTE: actionlint error対応
+          # > object, array, and null values should not be evaluated in template with ${{ }}
+          # > but evaluating the value of type null [expression]
+          # LITERAL_NULL: ${{ null }}
+          LITERAL_NULL: null
           LITERAL_BOOLEAN: ${{ true }}
           LITERAL_NUMBER: ${{ 12345 }}
           LITERAL_STRING: ${{ 'string' }}

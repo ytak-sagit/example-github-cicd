@@ -8,6 +8,7 @@ jobs:
     steps:
       - run: echo "Hello"
   fail:
+    if: false                 # NOTE: failしないように実行をスキップ
     runs-on: ubuntu-latest
     steps:
       - run: exit 1           # 終了ステータスがゼロ以外なので、エラーが発生する
