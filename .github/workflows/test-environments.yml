@@ -1,5 +1,5 @@
-name: Test Environments
-run-name: Test Environments
+name: Environments
+run-name: Environments
 on:
   workflow_dispatch:
     inputs:
