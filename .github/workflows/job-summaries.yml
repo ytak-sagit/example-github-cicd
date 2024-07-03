@@ -4,15 +4,10 @@ jobs:
   log:
     runs-on: ubuntu-latest
     steps:
-      # NOTE: actionlint error対応
-      # > Consider using { cmd1; cmd2; } >> file instead of individual redirects
-      # https://www.shellcheck.net/wiki/SC2129
       - run: |
-          {
-            echo "## Example Title :rocket:"
-            echo "- first line"
-            echo "- second line"
-            echo "\`\`\`typescript"
-            echo "const hoge = () => console.log('hoge.');"
-            echo "\`\`\`"
-          } >> "${GITHUB_STEP_SUMMARY}"
+          echo "## Example Title :rocket:" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- first line" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- second line" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`typescript" >> "${GITHUB_STEP_SUMMARY}"
+          echo "const hoge = () => console.log('hoge.');" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`" >> "${GITHUB_STEP_SUMMARY}"
