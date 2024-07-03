@@ -1,20 +1,14 @@
 name: Manual2
-run-name: Manual2
 on:
-  workflow_dispatch:
+  workflow_dispatch:                            # 手動実行イベント
     inputs:
-      environment-name:
-        type: environment                         # 入力パラメータでEnvironmentsを切り替え
-        default: test
-        required: false
-        description: Environment name
+      greeting:                                 # 入力パラメータ名
+        type: string                            # データ型（文字列）
+        default: Hello                          # 入力パラメータのデフォルト値
+        required: true                          # 入力パラメータの必須フラグ
+        description: A cheerful word            # 入力パラメータの概要
 jobs:
-  print:
+  run:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment-name }}   # 利用するEnvironmentsを指定
-    env:
-      USERNAME: ${{ vars.USERNAME }}              # Environment variablesの参照
-      PASSWORD: ${{ secrets.PASSWORD }}           # Environment secretsの参照
     steps:
-      - run: echo "${USERNAME}"
-      - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
+      - run: echo "${{ inputs.greeting }} !!"   # 入力パラメータ greeting の参照
