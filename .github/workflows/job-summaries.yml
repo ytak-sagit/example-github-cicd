@@ -4,12 +4,10 @@ jobs:
   log:
     runs-on: ubuntu-latest
     steps:
-      # NOTE: actionlint error対応
-      # https://www.shellcheck.net/wiki/SC2129
-      # 上記の対応だとうまくmarkdownが出力されていないようなので、逐次runで対応する
-      - run: echo "## Example Title :rocket:" >> "${GITHUB_STEP_SUMMARY}"
-      - run: echo "- first line" >> "${GITHUB_STEP_SUMMARY}"
-      - run: echo "- second line" >> "${GITHUB_STEP_SUMMARY}"
-      - run: echo "\`\`\`typescript" >> "${GITHUB_STEP_SUMMARY}"
-      - run: echo "const hoge = () => console.log('hoge.');" >> "${GITHUB_STEP_SUMMARY}"
-      - run: echo "\`\`\`" >> "${GITHUB_STEP_SUMMARY}"
+      - run: |
+          echo "## Example Title :rocket:" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- first line" >> "${GITHUB_STEP_SUMMARY}"
+          echo "- second line" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`typescript" >> "${GITHUB_STEP_SUMMARY}"
+          echo "const hoge = () => console.log('hoge.');" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`" >> "${GITHUB_STEP_SUMMARY}"
