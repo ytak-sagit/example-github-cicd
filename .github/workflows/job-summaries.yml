@@ -8,6 +8,6 @@ jobs:
           echo "## Example Title :rocket:" >> "${GITHUB_STEP_SUMMARY}"
           echo "- first line" >> "${GITHUB_STEP_SUMMARY}"
           echo "- second line" >> "${GITHUB_STEP_SUMMARY}"
-          echo "```typescript" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`typescript" >> "${GITHUB_STEP_SUMMARY}"
           echo "const hoge = () => console.log('hoge.');" >> "${GITHUB_STEP_SUMMARY}"
-          echo "```" >> "${GITHUB_STEP_SUMMARY}"
+          echo "\`\`\`" >> "${GITHUB_STEP_SUMMARY}"
