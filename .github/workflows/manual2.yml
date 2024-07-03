@@ -1,5 +1,5 @@
-name: Environments
-run-name: Environments
+name: Manual2
+run-name: Manual2
 on:
   workflow_dispatch:
     inputs:
