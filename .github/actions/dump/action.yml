@@ -30,8 +30,5 @@ runs:
         CONTEXT: ${{ toJSON(github) }}
       shell: bash
     - id: current
-      run: |
-        echo "::group::Output now date"
-        echo "date=$(date)" >> "${GITHUB_OUTPUT}"
-        echo "::endgroup::"
+      run: echo "date=$(date)" >> "${GITHUB_OUTPUT}"
       shell: bash
