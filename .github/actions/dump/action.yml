@@ -15,7 +15,7 @@ outputs:                                                # アクションの出�
 runs:
   using: composite                                      # アクションの実装方式
   steps:                                                # アクションのメインロジック
-    - run: printenv | sort
+    - run: "${GITHUB_ACTION_PATH}/sort-env.sh"          # 切り出したスクリプトを実行
       shell: bash
     - run: echo "${CONTEXT}"
       if: ${{ inputs.enable-context == 'true' }}
