@@ -16,14 +16,22 @@ runs:
   using: composite                                      # アクションの実装方式
   steps:                                                # アクションのメインロジック
     - run: |                                            # 切り出したスクリプトを実行
+        echo "::group::Run printenv and sort"
         chmod +x "${GITHUB_ACTION_PATH}/sort-env.sh"    # NOTE: 実行権限を与えないと'permission denied'でfailする
         "${GITHUB_ACTION_PATH}/sort-env.sh"
+        echo "::endgroup::"
       shell: bash
-    - run: echo "${CONTEXT}"
+    - run: |
+        echo "::group::Show context"
+        echo "${CONTEXT}"
+        echo "::endgroup::"
       if: ${{ inputs.enable-context == 'true' }}
       env:
         CONTEXT: ${{ toJSON(github) }}
       shell: bash
     - id: current
-      run: echo "date=$(date)" >> "${GITHUB_OUTPUT}"
+      run: |
+        echo "::group::Output now date"
+        echo "date=$(date)" >> "${GITHUB_OUTPUT}"
+        echo "::endgroup::"
       shell: bash
