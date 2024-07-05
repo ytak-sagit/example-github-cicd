@@ -1,0 +1,10 @@
+# リポジトリ全体のコードオーナーを設定する
+# (マッチする設定がない場合のフォールバック先)
+## * @octocat # NOTE: error回避のためコメントアウト
+* @ytak-sagit
+
+# 特定のファイル種別のみ、コードオーナーをTeamに設定する
+## *.txt @example-org/octocat-team # NOTE: error回避のためコメントアウト
+
+# 特定ディレクトリ配下のコードオーナーを、複数アカウントへ設定する
+## .github/workflows/ @github @ytak-sagit # NOTE: error回避のためコメントアウト
