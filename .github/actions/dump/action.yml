@@ -16,8 +16,8 @@ runs:
   using: composite                                      # アクションの実装方式
   steps:                                                # アクションのメインロジック
     - run: |                                            # 切り出したスクリプトを実行
-        chmod +x "${GITHUB_ACTION_PATH}/sort-env.sh"
-        && "${GITHUB_ACTION_PATH}/sort-env.sh"
+        chmod +x "${GITHUB_ACTION_PATH}/sort-env.sh"    # NOTE: 実行権限を与えないと'permission denied'でfailする
+        "${GITHUB_ACTION_PATH}/sort-env.sh"
       shell: bash
     - run: echo "${CONTEXT}"
       if: ${{ inputs.enable-context == 'true' }}
