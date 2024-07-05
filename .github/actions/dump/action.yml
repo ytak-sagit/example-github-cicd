@@ -1,0 +1,34 @@
+# NOTE: dump action のメタデータファイル
+name: Dump                                              # アクション名
+description: |                                          # アクションの概要
+  環境変数とgithubコンテキストをログへ出力します。
+  ワークフローのデバッグに便利です。
+inputs:                                                 # アクションの入力
+  enable-context:
+    default: 'true'
+    required: false
+    description: コンテキストをログ出力するか否か
+outputs:                                                # アクションの出力
+  dumped-date:
+    value: ${{ steps.current.outputs.date }}
+    description: ダンプ日時
+runs:
+  using: composite                                      # アクションの実装方式
+  steps:                                                # アクションのメインロジック
+    - run: |                                            # 切り出したスクリプトを実行
+        echo "::group::Run printenv and sort"
+        chmod +x "${GITHUB_ACTION_PATH}/sort-env.sh"    # NOTE: 実行権限を与えないと'permission denied'でfailする
+        "${GITHUB_ACTION_PATH}/sort-env.sh"
+        echo "::endgroup::"
+      shell: bash
+    - run: |
+        echo "::group::Show context"
+        echo "${CONTEXT}"
+        echo "::endgroup::"
+      if: ${{ inputs.enable-context == 'true' }}
+      env:
+        CONTEXT: ${{ toJSON(github) }}
+      shell: bash
+    - id: current
+      run: echo "date=$(date)" >> "${GITHUB_OUTPUT}"
+      shell: bash
