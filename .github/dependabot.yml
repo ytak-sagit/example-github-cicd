@@ -10,6 +10,7 @@ updates:
         versions:                                 # 除外対象のバージョン
           - 4.3.0
           - 4.3.1
-      - dependency-name: 'actions/*'              # アスタリスクは任意文字列にマッチ
-        update-types:                             # 除外するバージョンアップの種類
-          - version-update:semver-major           # メジャーバージョンアップは除外
+      # NOTE: ハンズオンではメジャーバージョンアップでもアップデートされるようにしておく
+      # - dependency-name: 'actions/*'              # アスタリスクは任意文字列にマッチ
+      #   update-types:                             # 除外するバージョンアップの種類
+      #     - version-update:semver-major           # メジャーバージョンアップは除外
