@@ -12,4 +12,4 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GITHUB CLIのクレデンシャル
     steps:
       - uses: actions/checkout@v4
-      - run: gh pr merge "${GITHUB_HEAD_REF}" --merge   # GITHUB CLIでマージ
+      - run: gh pr merge "${GITHUB_HEAD_REF}" --merge --auto  # GITHUB CLIでマージ
