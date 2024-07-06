@@ -1,0 +1,7 @@
+# 'enhancement' label
+enhancement:
+  - head-branch: ['^feature', 'feature']
+
+# 'bug' label
+bug:
+  - head-branch: ['^hot-?fix']
