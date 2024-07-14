@@ -1,0 +1,15 @@
+name: Convert fromJSON
+run-name: Convert fromJSON
+on: push
+env:
+  TIMEOUT: 1
+  RUNNABLE: false
+jobs:
+  sleep:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ fromJson(env.RUNNABLE) }}             # string型をboolean型へ変換
+        run: sleep 120
+        timeout-minutes: ${{ fromJSON(env.TIMEOUT) }} # string型をnumber型へ変換
+      - run: echo "catch timeout failure"
+        if: ${{ failure() }}
