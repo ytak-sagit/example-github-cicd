@@ -10,5 +10,7 @@ jobs:
     steps:
       - run: sleep 120
         timeout-minutes: ${{ fromJSON(env.TIMEOUT) }} # string型をnumber型へ変換
+      - run: "catch timeout failure"
+        if: ${{ failure() }}
       - run: echo "always echo"
         if: ${{ fromJSON(env.TRUE_FLAG) }}            # string型をboolean型へ変換
