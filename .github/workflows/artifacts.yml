@@ -7,7 +7,7 @@ jobs:
     steps:
       - run: mkdir upload
       - run: date > upload/date.txt         # アーティファクトの生成
-      - uses: actions/upload-artifact@v4    # アーティファクトのアップロード
+      - uses: actions/upload-artifact@v4.3.4    # アーティファクトのアップロード
         with:
           name: uploaded                    # アーティファクト名
           path: upload/date.txt             # アップロード対象のパス
