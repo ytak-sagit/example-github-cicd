@@ -1,5 +1,6 @@
 name: Reusable Workflows
 run-name: Reusable Workflows
+permissions: {}
 on:
   workflow_call:  # Reusable Workflowsを起動するイベント
     inputs:
