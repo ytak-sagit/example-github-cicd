@@ -22,15 +22,30 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      PR_NUMBER: ${{ inputs.pr-number }}
+      PR_COMMENT: "Welcome, ${{ github.actor }}"
+      GITHUB_TOKEN: ${{ secrets.token }}
     steps:
       - uses: actions/checkout@v4
-      - id: pr-comment
-        run: |
-          body="Welcome, ${GITHUB_ACTOR}"
-          gh pr comment "${PR_NUMBER}" --body "${body}"
-          echo "body=${body}" >> "${GITHUB_OUTPUT}"
+      - name: Get PR comments
+        id: get-pr-comments
+        run: |    # PRのコメント一覧を取得
+          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | body')
+          echo "comments=${comments}" >> "${GITHUB_OUTPUT}"
+      - name: Check a comment already submitted
+        id: check-pr-comment
+        run: |    # メッセージがすでに投稿済か確認
+          echo "${PR_COMMENTS[@]}" | grep -qw "${PR_COMMENT}"
+        continue-on-error: true
         env:
-          PR_NUMBER: ${{ inputs.pr-number }}
-          GITHUB_TOKEN: ${{ secrets.token }}
+          PR_COMMENTS: ${{ steps.get-pr-comments.outputs.comments }}
+      - name: Submit a PR comment
+        id: submit-pr-comment
+        run: |
+          gh pr comment "${PR_NUMBER}" --body "${PR_COMMENT}"
+          echo "body=${body}" >> "${GITHUB_OUTPUT}"
+        # NOTE: 前stepのコマンド実行時の終了コードが0以外(failure)であれば未投稿と判断し、コメント投稿stepを続行
+        if: ${{ failure() && steps.check-pr-comment.outcome == 'failure' }}
     outputs:
-      pr-comment: ${{ steps.pr-comment.outputs.body }}
+      pr-comment: ${{ steps.submit-pr-comment.outputs.body }}
