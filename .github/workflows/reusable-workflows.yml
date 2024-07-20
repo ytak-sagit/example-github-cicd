@@ -1,5 +1,6 @@
 name: Reusable Workflows
 run-name: Reusable Workflows
+permissions: {}
 on:
   workflow_call:  # Reusable Workflowsを起動するイベント
     inputs:
@@ -22,15 +23,26 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      PR_NUMBER: ${{ inputs.pr-number }}
+      PR_COMMENT: "Welcome, ${{ github.actor }}"
+      GITHUB_TOKEN: ${{ secrets.token }}
     steps:
       - uses: actions/checkout@v4
-      - id: pr-comment
+      - name: Check a comment already submitted
+        id: check-pr-comments
         run: |
-          body="Welcome, ${GITHUB_ACTOR}"
-          gh pr comment "${PR_NUMBER}" --body "${body}"
+          # PRのコメント一覧に、同一投稿メッセージが存在するかチェック
+          has_a_comment="$(
+            gh pr view --json comments "${PR_NUMBER}" \
+            | jq '[.comments[].body] | any(. == "'"${PR_COMMENT}"'")'
+          )"
+          echo "has_a_comment=${has_a_comment}" >> "${GITHUB_OUTPUT}"
+      - name: Submit a PR comment
+        id: submit-pr-comment
+        run: |
+          gh pr comment "${PR_NUMBER}" --body "${PR_COMMENT}"
           echo "body=${body}" >> "${GITHUB_OUTPUT}"
-        env:
-          PR_NUMBER: ${{ inputs.pr-number }}
-          GITHUB_TOKEN: ${{ secrets.token }}
+        if: ${{ !(fromJson(steps.check-pr-comments.outputs.has_a_comment)) }}
     outputs:
-      pr-comment: ${{ steps.pr-comment.outputs.body }}
+      pr-comment: ${{ steps.submit-pr-comment.outputs.body }}
