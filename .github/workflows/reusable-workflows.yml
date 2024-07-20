@@ -32,7 +32,6 @@ jobs:
       - name: Check a comment already submitted
         id: check-pr-comments
         run: |
-          set -x
           # PRのコメント一覧に、同一投稿メッセージが存在するかチェック
           has_a_comment="$(
             gh pr view --json comments "${PR_NUMBER}" \
