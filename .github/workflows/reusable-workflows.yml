@@ -34,13 +34,16 @@ jobs:
           # PRのコメント一覧を取得
           comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | .body')
           # メッセージがすでに投稿済か確認
-          if [[ -z "${comments[@]}" ]]; then
-            has_a_comment=false   # メッセージが1件もない場合
-          elif echo "${comments[@]}" | grep -qw "${PR_COMMENT}"; then
-            has_a_comment=true
-          else
-            has_a_comment=false
-          fi
+          # NOTE: actionlint error対応
+          # https://www.shellcheck.net/wiki/SC2199
+          has_a_comment=false
+          for comment in "${comments[@]}"
+          do
+            if [ "$comment" == "${PR_COMMENT}" ]; then
+              has_a_comment=true
+              break
+            fi
+          done
           echo "has_a_comment=${has_a_comment}" >> "${GITHUB_OUTPUT}"
       - name: Submit a PR comment
         id: submit-pr-comment
