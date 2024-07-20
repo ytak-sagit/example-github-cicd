@@ -34,7 +34,10 @@ jobs:
         run: |
           set -x
           # PRのコメント一覧に、同一投稿メッセージが存在するかチェック
-          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | select(.body == "${PR_COMMENT}")')
+          comments="$(
+            gh pr view --json comments "${PR_NUMBER}" \
+            | jq --arg pr_comment "${PR_COMMENT}" '.comments[] | select(.body == "$pr_comment")'
+          )"
           if [[ -z "$comments" ]]; then
             has_a_comment=false
           else
