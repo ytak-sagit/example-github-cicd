@@ -29,29 +29,23 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.token }}
     steps:
       - uses: actions/checkout@v4
-      - name: Get PR comments & Check a comment already submitted
-        id: get-and-check-pr-comments
+      - name: Check a comment already submitted
+        id: check-pr-comments
         run: |
           set -x
-          # PRのコメント一覧を取得
-          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | .body')
-          # メッセージがすでに投稿済か確認
-          # NOTE: actionlint error対応
-          # https://www.shellcheck.net/wiki/SC2199
-          has_a_comment=false
-          for comment in "${comments[@]}"
-          do
-            if [ "$comment" == "${PR_COMMENT}" ]; then
-              has_a_comment=true
-              break
-            fi
-          done
+          # PRのコメント一覧に、同一投稿メッセージが存在するかチェック
+          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | select(.body == "${PR_COMMENT}")')
+          if [[ -z "$comments" ]]; then
+            has_a_comment=false
+          else
+            has_a_comment=true
+          fi
           echo "has_a_comment=${has_a_comment}" >> "${GITHUB_OUTPUT}"
       - name: Submit a PR comment
         id: submit-pr-comment
         run: |
           gh pr comment "${PR_NUMBER}" --body "${PR_COMMENT}"
           echo "body=${body}" >> "${GITHUB_OUTPUT}"
-        if: ${{ !(fromJson(steps.get-and-check-pr-comments.outputs.has_a_comment)) }}
+        if: ${{ !(fromJson(steps.check-pr-comments.outputs.has_a_comment)) }}
     outputs:
       pr-comment: ${{ steps.submit-pr-comment.outputs.body }}
