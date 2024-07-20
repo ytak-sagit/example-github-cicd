@@ -1,7 +1,6 @@
 name: Container image scan with Trivy
 run-name: Container image scan with Trivy
-permissions:
-  contents: read
+permissions: {}
 on: pull_request
 jobs:
   scan:
