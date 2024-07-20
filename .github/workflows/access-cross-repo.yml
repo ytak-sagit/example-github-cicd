@@ -1,0 +1,22 @@
+name: Access cross repository
+run-name: Access cross repository
+permissions: {}
+on: push
+env:
+  TARGET_REPOSITORY: chapter17-cross-repo # GitHub Appsのインストール時に設定したリポジトリ
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - id: create                                    # GitHub Appsトークンの生成
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          repositories: ${{ env.TARGET_REPOSITORY }}
+      - uses: actions/checkout@v4                     # 別リポジトリのチェックアウト
+        with:
+          repository: ${{ github.repository_owner }}/${{ env.TARGET_REPOSITORY }}
+          path: ${{ env.TARGET_REPOSITORY }}          ## チェックアウト先のディレクトリ（runのcatでも指定）
+          token: ${{ steps.create.outputs.token }}
+      - run: cat "${TARGET_REPOSITORY}/README.md"     # 別リポジトリのREADMEを表示
