@@ -32,6 +32,7 @@ jobs:
       - name: Get PR comments & Check a comment already submitted
         id: get-and-check-pr-comments
         run: |
+          set -x
           # PRのコメント一覧を取得
           comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | .body')
           # メッセージがすでに投稿済か確認
