@@ -36,7 +36,7 @@ jobs:
           # PRのコメント一覧に、同一投稿メッセージが存在するかチェック
           has_a_comment="$(
             gh pr view --json comments "${PR_NUMBER}" \
-            | jq '[.comments[].body] | any(. == "'${PR_COMMENT}'")'
+            | jq '[.comments[].body] | any(. == "'"${PR_COMMENT}"'")'
           )"
           echo "has_a_comment=${has_a_comment}" >> "${GITHUB_OUTPUT}"
       - name: Submit a PR comment
