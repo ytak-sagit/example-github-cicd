@@ -1,0 +1,31 @@
+name: Access cross repository on my shell script
+run-name: Access cross repository on my shell script
+permissions:
+  contents: read
+on: push
+env:
+  TARGET_REPOSITORY: chapter17-cross-repo # GitHub Appsのインストール時に設定したリポジトリ
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4                     # 自作スクリプト実行のためにまずチェックアウトが必要
+      - id: create                                    # GitHub Appsトークンの生成 by 自作スクリプト
+        run: |
+          chmod +x "./.github/scripts/create-github-app-token.sh"
+          ./.github/scripts/create-github-app-token.sh
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      - uses: actions/checkout@v4                     # 別リポジトリのチェックアウト
+        with:
+          repository: ${{ github.repository_owner }}/${{ env.TARGET_REPOSITORY }}
+          path: ${{ env.TARGET_REPOSITORY }}          ## チェックアウト先のディレクトリ（runのcatでも指定）
+          token: ${{ steps.create.outputs.token }}
+      - run: cat "${TARGET_REPOSITORY}/README.md"     # 別リポジトリのREADMEを表示
+      - run: echo "by my shell script :)"
+      - run: |                                        # 即時失効APIの実行
+          chmod +x "./.github/scripts/delete-github-app-token.sh"
+          ./.github/scripts/delete-github-app-token.sh
+        env:
+          TOKEN: ${{ steps.create.outputs.token }}
