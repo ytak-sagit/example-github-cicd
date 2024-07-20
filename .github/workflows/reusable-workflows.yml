@@ -36,7 +36,7 @@ jobs:
           # メッセージがすでに投稿済か確認
           if [[ -z "${comments[@]}" ]]; then
             has_a_comment=false   # メッセージが1件もない場合
-          else if echo "${comments[@]}" | grep -qw "${PR_COMMENT}"; then
+          elif echo "${comments[@]}" | grep -qw "${PR_COMMENT}"; then
             has_a_comment=true
           else
             has_a_comment=false
