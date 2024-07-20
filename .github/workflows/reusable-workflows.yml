@@ -31,7 +31,7 @@ jobs:
       - name: Get PR comments
         id: get-pr-comments
         run: |    # PRのコメント一覧を取得
-          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | body')
+          comments=$(gh pr view --json comments "${PR_NUMBER}" | jq '.comments[] | .body')
           echo "comments=${comments}" >> "${GITHUB_OUTPUT}"
       - name: Check a comment already submitted
         id: check-pr-comment
